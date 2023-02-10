@@ -65,14 +65,14 @@ const SelectNFTs: React.FC<IProps> = ({ setNFTsSelected, setFlow }) => {
                         <div key={nftIndex} className='w-[143px] h-[200px] relative mt-3 ' onClick={() => handleSelectNFT(nft.id)}
                             style={(selectedNFTS.includes(nft?.id)) ? selectedNftStyle : {}}
                         >
-                            <div className=''>
+                            <div className='w-full h-full'>
                                 <img src={nft.media} 
-                                    className='rounded-[10px] object-contain'
+                                    className='rounded-[10px] object-fill w-full h-full'
                                 />
                             </div>
 
                             {!selectedNFTS.includes(nft.id) &&
-                                <div className='absolute top-[70%] px-4  w-full'>
+                                <div className='absolute top-[66%] px-4  w-full'>
                                     <div className='flex flex-col text-[11px] backdrop-blur-sm p-2  rounded-[10px] text-center'>
                                         <label className='text-white  ' style={{ fontWeight: 'bolder' }}>{nft.name}</label>
                                         <label className='text-white'>{nft.author_name}</label>
