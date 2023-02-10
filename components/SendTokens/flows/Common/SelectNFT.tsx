@@ -38,8 +38,8 @@ const SelectNFTs: React.FC<IProps> = ({ setNFTsSelected, setFlow }) => {
                 return {
                     id: nft.token_id,
                     media: nft.metadata.media,
-                    name: nft.metadata.title,
-                    author_name: nft.owner_id
+                    name: nft.metadata.description,
+                    author_name: nft.owner_id.substring(0, nft.owner_id.indexOf(".testnet"))
                 }
             }).filter((nft: any) => !(nft.name).includes("ProfileNFT")));
         }))
