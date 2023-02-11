@@ -35,7 +35,6 @@ const SendNFT: React.FC<IProps> = ({ setTransactionStatus, nfts, setSelectedNFTs
                 ).then(() => {
                     setTransactionStatus("success");
                 }).catch((err: any) => {
-                    console.log("=================================")
                     setTransactionStatus("failed");
                     console.error("Unable to send token due to: ", err)
                 })
