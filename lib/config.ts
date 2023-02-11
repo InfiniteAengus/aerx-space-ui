@@ -8,7 +8,7 @@ export const getConfig = (env: EnvType): ConnectConfig => {
             return {
                 networkId: "testnet",
                 nodeUrl: "https://rpc.testnet.near.org",
-                walletUrl: "https://wallet.testnet.near.org",
+                walletUrl: "https://testnet.mynearwallet.com",
                 helperUrl: "https://helper.testnet.near.org",
                 headers: {},
                 // explorerUrl: "https://explorer.testnet.near.org",
@@ -18,7 +18,7 @@ export const getConfig = (env: EnvType): ConnectConfig => {
             return {
                 networkId: "testnet",
                 nodeUrl: "https://rpc.testnet.near.org",
-                walletUrl: "https://wallet.testnet.near.org",
+                walletUrl: "https://testnet.mynearwallet.com",
                 helperUrl: "https://helper.testnet.near.org",
                 headers: {},
 
