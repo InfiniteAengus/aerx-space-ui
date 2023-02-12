@@ -270,7 +270,7 @@ const TextPost: React.FC<IProps> = ({
             letterSpacing="-0.02em"
             color="#FFFFFF"
           >
-            {metadata.title}
+            {owner_id}
           </Text>
         </Box>
 

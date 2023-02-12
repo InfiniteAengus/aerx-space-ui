@@ -25,7 +25,6 @@ const SendNFT: React.FC<IProps> = ({ setTransactionStatus, nfts, setSelectedNFTs
     const sendNFTs = async () => {
         try {
             if (accountId != null) {
-                // setTransactionStatus("pending");
                 await nearState.nftContract?.nft_transfer({
                     receiver_id: accountId,
                     token_id: nfts[0].id,
