@@ -153,6 +153,7 @@ useEffect(() => {
     };
   }, []);
 
+
   return circ ? (
     <CircleList remove={remCirc} />
   ) : pin ? (
@@ -289,7 +290,7 @@ useEffect(() => {
                     lineHeight=" 100%"
                     /* identical to box height, or 18px */
                   >
-                    {nearState.profile.username}.aerx
+                    {nearState.profile.userId}
                   </Text>
 
                   <Flex
