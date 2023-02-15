@@ -245,18 +245,6 @@ const TextPost: React.FC<IProps> = ({
                 width="16.44px"
                 height="16.44px"
               />
-
-              <Text
-                fontFamily="Poppins"
-                fontStyle="normal"
-                fontWeight="600"
-                fontSize="9.59px"
-                lineHeight="100%"
-                letterSpacing="-0.02em"
-                color="#FFFFFF"
-              >
-                ee34ad4
-              </Text>
             </Flex>
           </a>
         </Box>
