@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 // import Image from 'next/image';
+import Link from 'next/link'
 import toast, { Toaster } from "react-hot-toast";
 import { tempoFeed, videoFeed } from "../../helpers/data/feeds";
 import { initNearConnection } from "../../lib/auth";
@@ -101,12 +102,11 @@ const TextPost: React.FC<IProps> = ({
     }
   }, [metadata]);
 
-
   const babylonViewer = nearState.babylonViewer;
   const babylon = document.getElementById(`babylon-element-feed-for-${metadata.media}`);
   const babylonPost = document.getElementById(`babylon-element-feed-post-for-${metadata.media}`);
 
-  const load3d = async(element: HTMLElement, mediaUrl: String | undefined) => {
+  const load3d = async (element: HTMLElement, mediaUrl: String | undefined) => {
     if (babylonViewer) {
       await new babylonViewer.DefaultViewer(element, {
         extends: "none",
@@ -154,7 +154,7 @@ const TextPost: React.FC<IProps> = ({
           }
         }
       });
-    }else{
+    } else {
       console.log("Babylon viewer is null")
     }
   }
@@ -166,10 +166,10 @@ const TextPost: React.FC<IProps> = ({
   //       // for (let i = 0; i < babylon.length; i + 1) {
   //       //   console.log("babylon:  ", babylon.item(i))
   //       // } 
-        
+
   //     })();
   //   }
-    
+
   // }, [babylon, metadata.media])
 
   // useEffect(() => {
@@ -179,10 +179,10 @@ const TextPost: React.FC<IProps> = ({
   //       console.log("babylon post working")
   //     })();
   //   }
-    
+
   // }, [babylonPost, metadata.media])
 
-    
+
 
   return (
     <Box
@@ -212,7 +212,7 @@ const TextPost: React.FC<IProps> = ({
             )}
             {metadata.media?.includes(".glb") && (
               <Box width="27.4px" height="27.4px" borderRadius="13.7px" borderColor="white" border="1px solid" >
-                <div  id={`babylon-element-feed-for-${metadata.media}`} style={{ width: "100%", height: "100%", margin: "auto", borderRadius: "13.7px" }}></div>
+                <div id={`babylon-element-feed-for-${metadata.media}`} style={{ width: "100%", height: "100%", margin: "auto", borderRadius: "13.7px" }}></div>
               </Box>
             )}
           </Box>
@@ -230,32 +230,35 @@ const TextPost: React.FC<IProps> = ({
           </Text>
         </Flex>
         <Box>
-          <Flex
-            gap="8.9px"
-            alignItems="center"
-            backgroundColor="#ffffff33"
-            height="27.4px"
-            px="6px"
-            borderRadius="34.25px"
-          >
-            <Image
-              src="/assets/icons/nft-icon.svg"
-              alt="NFT"
-              width="16.44px"
-              height="16.44px"
-            />
-            <Text
-              fontFamily="Poppins"
-              fontStyle="normal"
-              fontWeight="600"
-              fontSize="9.59px"
-              lineHeight="100%"
-              letterSpacing="-0.02em"
-              color="#FFFFFF"
+          <a target="_blank" href={`${process.env.NEXT_PUBLIC_NFT_URL}/${feed.post_id}`} rel="noopener noreferrer">
+            <Flex
+              gap="8.9px"
+              alignItems="center"
+              backgroundColor="#ffffff33"
+              height="27.4px"
+              px="6px"
+              borderRadius="34.25px"
             >
-              ee34ad4
-            </Text>
-          </Flex>
+              <Image
+                src="/assets/icons/nft-icon.svg"
+                alt="NFT"
+                width="16.44px"
+                height="16.44px"
+              />
+
+              <Text
+                fontFamily="Poppins"
+                fontStyle="normal"
+                fontWeight="600"
+                fontSize="9.59px"
+                lineHeight="100%"
+                letterSpacing="-0.02em"
+                color="#FFFFFF"
+              >
+                ee34ad4
+              </Text>
+            </Flex>
+          </a>
         </Box>
       </Flex>
 
@@ -362,14 +365,14 @@ const TextPost: React.FC<IProps> = ({
                   }
                   className="cursor-pointer charge-filter-effect  rounded-full flex justify-around"
                 >
-                 <Box className="charge-filter-effect  rounded-full flex justify-around py-1 px-2 backdrop-blur-lg bg-white/30 ">
-                <Image
-                  src="../resources/Union.png"
-                  alt="post rewarded"
-                  width="14px"
-                  height="21px"
-                />
-              </Box>
+                  <Box className="charge-filter-effect  rounded-full flex justify-around py-1 px-2 backdrop-blur-lg bg-white/30 ">
+                    <Image
+                      src="../resources/Union.png"
+                      alt="post rewarded"
+                      width="14px"
+                      height="21px"
+                    />
+                  </Box>
                 </div>
               )}
             </div>
@@ -508,14 +511,14 @@ const renderTempo = (state: { tempos: string | any[]; }) => {
           mb={1}
         >
           <Flex justifyContent="space-between">
-          <Box className="charge-filter-effect  rounded-full flex justify-around py-1 px-1 backdrop-blur-sm bg-white/30 ">
-            <Image
-              src="../resources/Tempo.png"
-              alt="tempo post"
-              width="16.44px"
-              height="16.44px"
-              alignContent="center"
-            />
+            <Box className="charge-filter-effect  rounded-full flex justify-around py-1 px-1 backdrop-blur-sm bg-white/30 ">
+              <Image
+                src="../resources/Tempo.png"
+                alt="tempo post"
+                width="16.44px"
+                height="16.44px"
+                alignContent="center"
+              />
             </Box>
             <Image
               src="/assets/icons/play-icon.svg"
@@ -714,7 +717,7 @@ const renderTempo = (state: { tempos: string | any[]; }) => {
                   height="21px"
                 />
               </Box>
-              
+
             </Flex>
           </Flex>
         </Flex>

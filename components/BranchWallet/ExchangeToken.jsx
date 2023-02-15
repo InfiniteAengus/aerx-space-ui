@@ -13,7 +13,6 @@ import { MinusIcon } from "@chakra-ui/icons";
 import { nearStore } from '../../store/near';
 import { Big } from "big.js";
 import toast from 'react-hot-toast';
-import { initNearConnectionForContract } from "../../lib/auth";
 
 const nearToken = "nearnativetoken.near";
 function Exchange(props) {
