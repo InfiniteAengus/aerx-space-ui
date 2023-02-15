@@ -20,6 +20,13 @@ import { authenticatePinata } from "./pinata";
 import Big from "big.js";
 
 
+import { setupWalletSelector } from "@near-wallet-selector/core";
+import { setupSender } from "@near-wallet-selector/sender";
+import { setupMeteorWallet } from "@near-wallet-selector/meteor-wallet";
+import { setupModal } from "@near-wallet-selector/modal-ui";
+import "@near-wallet-selector/modal-ui/styles.css";
+
+
 const {
     KeyPair,
     InMemorySigner,
@@ -76,7 +83,7 @@ export default async function contractFullAccessKey(
     // Step 4:  get the account object of the currentAccount.  At this point, we should have full control over the account.
     let account;
     try {
-        account = new nearApiJs.Account(near.connection, CONTRACT_NAME);
+        account = new Account(near.connection, CONTRACT_NAME);
     } catch (e: any) {
         alert("ERROR GETTING ACCOUNT");
     }
@@ -90,7 +97,7 @@ export default async function contractFullAccessKey(
     }
 
     // initiate the contract so its associated with this current account and exposing all the methods
-    const contract = new nearApiJs.Contract(account, CONTRACT_NAME, {
+    const contract = new Contract(account, CONTRACT_NAME, {
         viewMethods: [
             "is_username_available",
             "has_registered",
@@ -117,55 +124,59 @@ export default async function contractFullAccessKey(
 }
 
 export async function initNearConnection(nearState: NearStoreType) {
-    // Initialize connection to the NEAR testnet
-    const nearTokenConfig = getConfig(process.env.NODE_ENV);
-    //set keystore and connect
-    const keyStore = new keyStores.BrowserLocalStorageKeyStore();
-    const config: ConnectConfig = {
-        ...nearTokenConfig,
-        headers: {},
-        keyStore,
-    };
-    const nearConnection = await connect(config);
-    console.log("nearConnection : ", nearConnection);
-    nearState.setConnection(nearConnection);
 
-    // TODO: CHECK IF THE KEY IS NOT CAUSING LOCALSTORAGE ACCESS ISSUE
-    const walletConnection = new WalletConnection(nearConnection, "Aerx");
-    console.log("walletConnection : ", walletConnection);
-    nearState.setWalletConnection(walletConnection);
-
-    //Get accountId 
-    const accountId = walletConnection.getAccountId();
-    console.log("accountId : ", accountId);
-    //verify accountId exists
-    if (!accountId) {
-        console.log("Account id is empty");
-        //Todo: prompt user to register or login
-        return;
+    if (!nearState.accountId && window.location.href != window.location.origin + "/") {
+        window.location.replace(window.location.origin)
     }
-    nearState.setAccountId(accountId);
-    //Get balance
-    const _account = await nearConnection.account(accountId);
-    const balance = await _account.getAccountBalance();
-    console.log("available near balance: ", balance.available);
-    const availableNear = balance.available;
-    const nearBalanceBigN = new Big(availableNear || 0);
-    const formattedNearBalance = nearBalanceBigN.div("10e23").toFixed(3);
-    nearState.setNearBalance(formattedNearBalance);
-    console.log("formated near balance: ", formattedNearBalance)
-    //.2 load tokenContract whenever it is ready
-    await loadTokenContract(nearState, walletConnection.account());
-    await loadNFTContract(nearState, walletConnection.account());
-    //3. load dex contract whenever it is ready
-    await loadDexContrat(nearState, walletConnection.account());
-    //.4 load profile with user as signer(incase aerx decide to let user pay)
-    await loadProfileWithUserAsSigner(nearState, walletConnection.account());
-    //.5 halt until pnftContract is set to state
-    await loadProfileContract(nearState);
-    //.6 load nft contract
+    // // Initialize connection to the NEAR testnet
+    // const nearTokenConfig = getConfig(process.env.NODE_ENV);
+    // //set keystore and connect
+    // const keyStore = new keyStores.BrowserLocalStorageKeyStore();
+    // const config: ConnectConfig = {
+    //     ...nearTokenConfig,
+    //     headers: {},
+    //     keyStore,
+    // };
+    // const nearConnection = await connect(config);
+    // console.log("nearConnection : ", nearConnection);
+    // nearState.setConnection(nearConnection);
+
+    // // TODO: CHECK IF THE KEY IS NOT CAUSING LOCALSTORAGE ACCESS ISSUE
+    // const walletConnection = new WalletConnection(nearConnection, "Aerx");
+    // console.log("walletConnection : ", walletConnection);
+    // nearState.setWalletConnection(walletConnection);
+
+    // //Get accountId 
+    // const accountId = walletConnection.getAccountId();
+    // console.log("accountId : ", accountId);
+    // //verify accountId exists
+    // if (!accountId) {
+    //     console.log("Account id is empty");
+    //     //Todo: prompt user to register or login
+    //     return;
+    // }
+    // nearState.setAccountId(accountId);
+    // //Get balance
+    // const _account = await nearConnection.account(accountId);
+    // const balance = await _account.getAccountBalance();
+    // console.log("available near balance: ", balance.available);
+    // const availableNear = balance.available;
+    // const nearBalanceBigN = new Big(availableNear || 0);
+    // const formattedNearBalance = nearBalanceBigN.div("10e23").toFixed(3);
+    // nearState.setNearBalance(formattedNearBalance);
+    // console.log("formated near balance: ", formattedNearBalance)
+    // //.2 load tokenContract whenever it is ready
+    // await loadTokenContract(nearState, walletConnection.account());
     // await loadNFTContract(nearState, walletConnection.account());
-    // complete the initnearConnection
+    // //3. load dex contract whenever it is ready
+    // await loadDexContrat(nearState, walletConnection.account());
+    // //.4 load profile with user as signer(incase aerx decide to let user pay)
+    // await loadProfileWithUserAsSigner(nearState, walletConnection.account());
+    // //.5 halt until pnftContract is set to state
+    // await loadProfileContract(nearState);
+    // //.6 load nft contract
+    // // await loadNFTContract(nearState, walletConnection.account());
+    // // complete the initnearConnection
 }
 
 export async function checkProfile(nearState: any) {
@@ -234,6 +245,7 @@ const loadTokenContract = (
     nearState: NearStoreType,
     account: ConnectedWalletAccount,
 ) => {
+    console.log(account, "=========account=========")
     const tokenContract: TokenContract = new Contract(
         account,
         TOKEN_CONTRACT_NAME,
@@ -397,28 +409,73 @@ export function logout(nearState: NearStoreType) {
 
 //Todo: create custom url/page for error 401 or 404(incase user didn't approve connection or insufficient balance)
 export async function loginToken(nearState: NearStoreType) {
-    if (!nearState.walletConnection) {
-        throw new Error("Error finding walletConnection state try again later");
-        //Todo: alert users if this ever happens
-    }
-    //Todo: change contract to profile
-    //if user hasn't sign out redirect to their profile else redirect to registration form and handle the profile redirect on registration page onload
-    if (nearState.profile?.userId != "" && nearState.profile?.username != "") {
-        const isUserRegistered = await nearState.pnftContract?.has_registered({ user_id: nearState.accountId } as any);
-        if (isUserRegistered) {
-            window.location.replace(window.location.origin + "/flow")
-        }
-        else {
-            window.location.replace(window.location.origin + "/settings/profile")
-        }
-    } else {
-        await nearState.walletConnection?.requestSignIn({
-            contractId: process.env.TOKEN_CONTRACT_NAME,
-            successUrl: `${window.location.origin}/settings/profile`,
-            failureUrl: `${window.location.origin}/error`,
-        }
-        );
-    }
+
+    const selector = await setupWalletSelector({
+        network: "testnet",
+        modules: [
+            setupSender(),
+            setupMeteorWallet()
+        ]
+    })
+
+    const modal = setupModal(selector, {
+        contractId: "aerx.aerxspace.testnet"
+    });
+
+    selector.on("signedIn", async (env) => {
+    // const _account = await env.accounts[0];
+    // const balance = await _account.getAccountBalance();
+    // console.log("available near balance: ", balance.available);
+    // const availableNear = balance.available;
+    // const nearBalanceBigN = new Big(availableNear || 0);
+    // const formattedNearBalance = nearBalanceBigN.div("10e23").toFixed(3);
+    // nearState.setNearBalance(formattedNearBalance);
+    // console.log("formated near balance: ", formattedNearBalance)
+    // //.2 load tokenContract whenever it is ready
+    // await loadTokenContract(nearState, walletConnection.account());
+    // await loadNFTContract(nearState, walletConnection.account());
+    // //3. load dex contract whenever it is ready
+    // await loadDexContrat(nearState, walletConnection.account());
+    // //.4 load profile with user as signer(incase aerx decide to let user pay)
+    // await loadProfileWithUserAsSigner(nearState, walletConnection.account());
+    // //.5 halt until pnftContract is set to state
+    // await loadProfileContract(nearState);
+    // //.6 load nft contract
+    // // await loadNFTContract(nearState, walletConnection.account());
+    //     nearState.setAccountId(env.accounts[0])
+    const wallet = await selector.wallet("sender");
+    const accounts = await wallet.getAccounts();
+    console.log(accounts); // [{ accountId: "test.testnet" }]
+
+
+        modal.hide()
+    });
+
+    modal.show()
+
+    // if (!nearState.walletConnection) {
+    //     throw new Error("Error finding walletConnection state try again later");
+    //     //Todo: alert users if this ever happens
+    // }
+    // //Todo: change contract to profile
+    // //if user hasn't sign out redirect to their profile else redirect to registration form and handle the profile redirect on registration page onload
+    // if (nearState.profile?.userId != "" && nearState.profile?.username != "") {
+    //     const isUserRegistered = await nearState.pnftContract?.has_registered({ user_id: nearState.accountId } as any);
+    //     if (isUserRegistered) {
+    //         window.location.replace(window.location.origin + "/flow")
+    //     }
+    //     else {
+    //         window.location.replace(window.location.origin + "/settings/profile")
+    //     }
+    // } else {
+    //     console.log(nearState.walletConnection, "=========wallet connection========")
+    //     await nearState.walletConnection?.requestSignIn({
+    //         contractId: process.env.TOKEN_CONTRACT_NAME,
+    //         successUrl: `${window.location.origin}/settings/profile`,
+    //         failureUrl: `${window.location.origin}/error`,
+    //     }
+    //     );
+    // }
 }
 
 export { loadOtherTokenContracts }
