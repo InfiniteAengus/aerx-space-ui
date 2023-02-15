@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import ProfileSettingForm from "../../../components/Forms/Profile";
 import { useRouter } from "next/router";
 import { nearStore } from "../../../store/near";
-import { initNearConnection } from "../../../lib/auth";
 import { Box, Image } from "@chakra-ui/react";
 
 const ProfileSettings: React.FC = () => {
