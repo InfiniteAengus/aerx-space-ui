@@ -626,15 +626,11 @@ const Chat: React.FC = () => {
   }
 
   return (
-    <div className="w-full h-full z-0  bg-black-dark  rounded-[20px]   overflow-x-hidden flex gap-2 ">
+    <SmoothCorners corners="10,40" className="w-full h-full z-0 bg-black-dark overflow-x-hidden flex">
       {!chat.minimized && sidebar.collapsed && (
-        <SmoothCorners
-          corners="32,42"
-          borderRadius="20px"
-          className="w-[45%] h-full"
-        >
+        <SmoothCorners corners="10,40" className="w-max h-full">
           <div
-            className="w-full  overflow-x-hidden overflow-y-hidden h-full rounded-[20px] bg-black-light  p-4"
+            className="w-full  overflow-x-hidden overflow-y-hidden h-full bg-black-light flex flex-col p-4"
             style={
               {
                 // width: (chat.minimized) ? "0%" : ""
@@ -643,7 +639,7 @@ const Chat: React.FC = () => {
           >
             <ChatHeader onChange={handleSearchName} />
 
-            <div className="h-[80%]">
+            <div className="grow">
               <div className="flex gap-2 mt-4 ">
                 <Image
                   src="/assets/icons/pin-icon.svg"
@@ -696,14 +692,14 @@ const Chat: React.FC = () => {
         </SmoothCorners>
       )}
       <div
-        className="w-full  overflow-y-hidden h-full z-10 overflow-x-hidden"
+        className="w-full overflow-y-hidden h-full z-10 overflow-x-hidden"
         style={{
           width: chat.minimized || !sidebar.collapsed ? "100%" : "",
         }}
       >
         <ChatRoom activeMessage={chats[activeMessage]} />
       </div>
-    </div>
+    </SmoothCorners>
   )
 }
 

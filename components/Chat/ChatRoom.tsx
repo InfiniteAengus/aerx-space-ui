@@ -13,7 +13,7 @@ import {
   selectMessages,
   setDirectMessages,
 } from "../../store/slices/messagesSlice"
-import { Box, Flex, Text } from "@chakra-ui/react"
+import { Box, Button, Flex, Text } from "@chakra-ui/react"
 import { SmoothCorners } from "react-smooth-corners"
 import Image from "next/image"
 import { Transaction } from "../../components/SendTokens/ui/Transaction"
@@ -30,31 +30,27 @@ const PrimaryHeader: React.FC = () => {
     }
   }
   return (
-    <Flex className="flex justify-between relative">
-      <Flex alignItems="center">
-        <Box className="w-9">
-          <Image
-            src={"/assets/icons/chat-room-header-ico.svg"}
-            alt="valuengr"
-            width={35}
-            layout="fixed"
-            height={35}
-          />
-        </Box>
-        <Box className="relative bottom-[2px]">
-          <Text
-            fontFamily="Poppins"
-            fontSize="14px"
-            fontWeight="600"
-            color="#ffffff"
-            lineHeight="100%"
-            letterSpacing="-0.02em"
-          >
-            Valuengr
-          </Text>
-        </Box>
+    <Flex className="flex justify-between relative max-h-[32px]">
+      <Flex alignItems="center" gap="6px">
+        <Image
+          src={"/assets/icons/chat-room-header-ico.svg"}
+          alt="valuengr"
+          width={32}
+          layout="fixed"
+          height={32}
+        />
+        <Text
+          fontFamily="Poppins"
+          fontSize="14px"
+          fontWeight="600"
+          color="#ffffff"
+          lineHeight="100%"
+          letterSpacing="-0.02em"
+        >
+          Valuengr
+        </Text>
       </Flex>
-      <Flex alignItems="center" className="mr-2 relative bottom-[2px]">
+      <Flex alignItems="center">
         <Box className="cursor-pointer flex items-center hover:bg-black-light p-2 transition duration-150 ease-in-out rounded-[10px]">
           <Image
             src="/resources/Add Users.png"
@@ -165,9 +161,18 @@ const SecondaryHeader: React.FC<{
     <Flex
       // mt="17.65px"
       gap=""
-      className="flex mt-3 justify-between   relative bottom-2 mb-1"
+      className="flex mt-3 justify-between   relative mb-1"
     >
       <Flex alignItems="center" className="relative left-1   ">
+        <Button variant="link" minWidth="unset" marginRight="8px">
+          <Image
+            src="/icons/back-button.svg"
+            width="20px"
+            height="20px"
+            alt="Chat back button"
+            className="rounded-full"
+          />
+        </Button>
         {!activeMessage?.avatar.includes(".glb") && (
           <Image
             src={activeMessage?.avatar || "/assets/images/avatar-1.svg"}
@@ -201,17 +206,17 @@ const SecondaryHeader: React.FC<{
         >
           <Text
             fontFamily="Poppins"
-            fontSize="10.96px"
+            fontSize="14px"
             fontWeight="500"
             color="#FFFFFF"
             lineHeight="100%"
             letterSpacing="-0.02em"
           >
-            {activeMessage?.name}
+            {activeMessage?.name || "Anna Bylik"}
           </Text>
           <Text
             fontFamily="Poppins"
-            fontSize="9.5px"
+            fontSize="12px"
             fontWeight="400"
             color="#FFFFFF80"
             lineHeight="100%"
@@ -221,7 +226,7 @@ const SecondaryHeader: React.FC<{
           </Text>
         </Flex>
       </Flex>
-      <Flex gap="14px" className="relative right-3 ">
+      <Flex gap="14px" alignItems="center">
         <Image
           src="/assets/icons/audio-call-icon.svg"
           alt="Phone"
@@ -348,7 +353,7 @@ const MessagesWrapper: React.FC<{ activeReceiver: IMessageItem }> = ({
 
   return (
     <div
-      className={` h-full w-[102%]  text-center overflow-y-scroll  ${
+      className={`h-full text-center overflow-y-scroll ${
         isScroll
           ? " transition ease-in-out duration-300"
           : " scrollbar-hide transition ease-in-out duration-300"
@@ -591,61 +596,56 @@ const SendMessage: React.FC<{
   }
 
   return (
-    <Flex className="flex justify-between mt-1  relative top-1 bg-black-dark w-full">
-      <Flex gap="" alignItems="center">
-        <div className="relative top-0.5">
-          <Image
-            src="/assets/icons/tag-icon.svg"
-            alt="Tag"
-            className="cursor-pointer hover:scale-110 transition ease-in-out duration-300"
-            layout="fixed"
-            width="24px"
-            height="24px"
-          />
-        </div>
-        <div className="mb-1.5 relative left-3">
-          <input
-            type="text"
-            pattern="/^\s*$/"
-            placeholder="Type message..."
-            value={message}
-            className={`placeholder-[#565656]  ml-1 placeholder:text-[15px] tracking-[-0.02em]  leading-4  block mt-[3px] items-stretch bg-transparent  focus:outline-none  h-8 w-[200px]  xl:w-[170px] 2xl:w-[200px]
-              text-white text-[13px]  `}
-            required
-            style={{
-              resize: "none",
-            }}
-            onChange={(e) => setMessage(e.target.value)}
-            onKeyDownCapture={(e) => {
-              if (e.key === "Enter") {
-                const resultMessage: boolean = message.trim().length === 0
-                if (!resultMessage) {
-                  handleSendMessageCapture()
-                }
-              }
-            }}
-            onKeyDown={(e) => {
+    <Flex className="flex bg-black-dark w-full max-h-[36px]">
+      <Flex gap="6px" grow={1} alignItems="center">
+        <Image
+          src="/assets/icons/tag-icon.svg"
+          alt="Tag"
+          className="cursor-pointer hover:scale-110 transition ease-in-out duration-300"
+          layout="fixed"
+          width="20px"
+          height="20px"
+        />
+        <input
+          type="text"
+          pattern="/^\s*$/"
+          placeholder="Type message..."
+          value={message}
+          className={`placeholder-[#565656] placeholder:text-[15px] h-full tracking-[-0.02em] leading-4 block items-stretch bg-transparent  focus:outline-none text-white text-[13px]  `}
+          required
+          style={{
+            resize: "none",
+          }}
+          onChange={(e) => setMessage(e.target.value)}
+          onKeyDownCapture={(e) => {
+            if (e.key === "Enter") {
               const resultMessage: boolean = message.trim().length === 0
-
               if (!resultMessage) {
-                if (e.key === "Enter") {
-                  handleSendMessage()
-                }
+                handleSendMessageCapture()
               }
-            }}
-          />
-        </div>
-        <div className="w-12 relative left-1 mx-auto h-12 mt-[1px] ">
-          <Image
-            src="/resources/Group 55371.png"
-            alt="send message"
-            width="36px"
-            height="36px"
-            className="cursor-pointer hover:bg-black-light rounded-full transition ease-in-out duration-300  "
-            onClick={onSend}
-          />
-        </div>
+            }
+          }}
+          onKeyDown={(e) => {
+            const resultMessage: boolean = message.trim().length === 0
+
+            if (!resultMessage) {
+              if (e.key === "Enter") {
+                handleSendMessage()
+              }
+            }
+          }}
+        />
       </Flex>
+      <div className="w-max">
+        <Image
+          src="/resources/Group 55371.png"
+          alt="send message"
+          width="36px"
+          height="36px"
+          className="cursor-pointer hover:bg-black-light rounded-full transition ease-in-out duration-300  "
+          onClick={onSend}
+        />
+      </div>
     </Flex>
   )
 }
@@ -659,10 +659,10 @@ const ChatRoom: React.FC<{
       {initializeSendToken && (
         <SendTokens onClose={() => setInitializeSendToken(false)} />
       )}
-      <div className="p-2 flex flex-col z-0">
+      <div className="p-3 flex flex-col z-0 h-full">
         <PrimaryHeader />
         <SecondaryHeader activeMessage={activeMessage} />
-        <div className="h-[80vh] w-fit  flex flex-col justify-between  ">
+        <div className="grow flex flex-col justify-between  ">
           <MessagesWrapper activeReceiver={activeMessage} />
           {/* <Transaction
             amount={"+12000"}
