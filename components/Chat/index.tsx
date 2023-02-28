@@ -626,9 +626,9 @@ const Chat: React.FC = () => {
   }
 
   return (
-    <SmoothCorners corners="10,40" className="w-full h-full z-0 bg-black-dark overflow-x-hidden flex">
+    <SmoothCorners corners="25,40" className="w-full h-full relative z-0 bg-black-dark overflow-x-hidden flex">
       {!chat.minimized && sidebar.collapsed && (
-        <SmoothCorners corners="10,40" className="w-max h-full">
+        <SmoothCorners corners="25,40" className="w-max h-full">
           <div
             className="w-full  overflow-x-hidden overflow-y-hidden h-full bg-black-light flex flex-col p-4"
             style={
@@ -639,7 +639,7 @@ const Chat: React.FC = () => {
           >
             <ChatHeader onChange={handleSearchName} />
 
-            <div className="grow">
+            <div className="grow overflow-y-auto">
               <div className="flex gap-2 mt-4 ">
                 <Image
                   src="/assets/icons/pin-icon.svg"
@@ -663,7 +663,7 @@ const Chat: React.FC = () => {
                   All Chats
                 </label>
               </div>
-              <div className="h-full gap-1 overflow-y-scroll pb-2.5 w-[105%]">
+              <div className="h-full gap-1">
                 {chatsClone.map((message, index) => (
                   <MessageItem
                     onClickCapture={() => handleCapture(index)}

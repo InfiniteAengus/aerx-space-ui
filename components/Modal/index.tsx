@@ -6,7 +6,7 @@ const Modal: React.FC<{ children: ReactNode; onClose: () => void }> = ({
   onClose,
 }) => {
   return (
-    <div className="absolute inset-0 h-screen w-full flex bg-black-light bg-opacity-10 backdrop-blur-sm items-center justify-center z-10">
+    <div className="absolute inset-0 w-full flex bg-black-light bg-opacity-10 backdrop-blur-sm items-center justify-center z-10">
       <div className="relative  top-0 right-0  w-[max-content] z-50 h-[max-content] p-3 bg-[#191919] rounded-[20px]">
         <div className="w-full flex z-50">
           <div
