@@ -639,7 +639,14 @@ const Chat: React.FC = () => {
           >
             <ChatHeader onChange={handleSearchName} />
 
-            <div className="grow overflow-y-auto">
+            <Box
+              className="grow overflow-y-auto"
+              css={{ 
+                '&::-webkit-scrollbar': {
+                  display: "none",
+                },
+              }}
+            >
               <div className="flex gap-2 mt-4 ">
                 <Image
                   src="/assets/icons/pin-icon.svg"
@@ -674,7 +681,7 @@ const Chat: React.FC = () => {
                   />
                 ))}
               </div>
-            </div>
+            </Box>
 
             {/* <div>
                         <div className='flex gap-2 mt-4'>
