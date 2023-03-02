@@ -59,10 +59,10 @@ const SelectNFTs: React.FC<IProps> = ({ setNFTsSelected, setFlow }) => {
             <div className='w-full flex justify-around'>
                 <label className='text-white'>Select NFT</label>
             </div>
-            <div className='mt-4 overflow-y-scroll nft-container'>
-                <div className='grid grid-cols-3 relative'>
+            <div className='mt-4 nft-container'>
+                <div className='grid grid-cols-3 relative gap-4 h-[350px] max-w-[464px] overflow-y-auto'>
                     {NFTs.map((nft, nftIndex) => (
-                        <div key={nftIndex} className='w-[143px] h-[200px] relative mt-3 ' onClick={() => handleSelectNFT(nft.id)}
+                        <div key={nftIndex} className='h-[200px] relative' onClick={() => handleSelectNFT(nft.id)}
                             style={(selectedNFTS.includes(nft?.id)) ? selectedNftStyle : {}}
                         >
                             <div className='w-full h-full'>
